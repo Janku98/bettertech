@@ -1,0 +1,53 @@
+.containerCard{
+    background-color: rgb(43, 41, 41);
+    width: 200px;
+    height: 200px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 20px;
+}
+.titleCard{
+    display: flex;
+}
+.descriptionCard{
+    display: flex;
+}
+.btn {
+	display: inline-block;
+	font-weight: 400;
+	color: #212529;
+	text-align: center;
+	border: 1px solid transparent;
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	line-height: 1.5;
+	border-radius: .25rem;
+	color: #fff;
+	background-color: #007bff;
+}
+
+
+.btn:hover{
+  	background-color: #0069d9;
+}
+.btn2 {
+	display: inline-block;
+	font-weight: 400;
+	color: #212529;
+	text-align: center;
+	border: 1px solid transparent;
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	line-height: 1.5;
+	border-radius: .25rem;
+	color: #fff;
+	background-color: #4c7501;
+}
+
+
+.btn2:hover{
+  	background-color: #c3fc5a;
+}

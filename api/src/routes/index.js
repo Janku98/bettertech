@@ -3,38 +3,47 @@ const fetch = require("cross-fetch");
 const {User, Especialidad} = require('../db');
 const {Sequelize}= require("sequelize");
 const Op=Sequelize.Op;
+const jwt = require('jsonwebtoken');
+const authToken = require('../middlewares/authToken.js');
+const authTokenAdmin = require('../middlewares/authTokenAdmin.js');
+const authTokenGet = require('../middlewares/authTokenGet.js');
 
 
 const router = Router();
 
-router.post('/newSpeciality' , async (req, res)=>{
+router.post('/newSpeciality', authToken, async (req, res)=>{
     let {name, description} =  req.body;
     try{
         if(!name || !description){
             return res.status(404).send({error: "Please complete all the fields"})
         }else{
-            const createSpeciality = await Especialidad.create({
-                name,
-                description
-            });
-            res.json(createSpeciality)
-        };
-
-    }catch{
-        res.status(404).send({error: "Something wrong creating a new speciality"})
-    }
+                const createSpeciality = await Especialidad.create({
+                    name,
+                    description
+                });
+                res.json({
+                    mensaje: "Speciality created",
+                    speciality: createSpeciality
+                })                  
+            }            
+        }catch{
+            res.status(404).send({error: "Something wrong creating a new speciality"})
+        }
 });
 
 
-router.get('/getSpecialities', async (req, res)=>{
-    const search = await Especialidad.findAll();
-    if(!search){
-        return res.status(404).send({error: "Table not found :("})
-    }else{
+
+router.get('/getSpecialities', authTokenGet, async (req, res)=>{
+
+    try{
+        const search = await Especialidad.findAll();
         return res.status(200).json(search)
-    }
-});
-
+    }catch(err){
+         console.log(err)
+    };
+})
+        
+    
 
 router.put('/updateSpeciality', async (req, res)=>{
     let {id, name, description} = req.body;
@@ -61,7 +70,7 @@ router.put('/updateSpeciality', async (req, res)=>{
 });
 
 
-router.get('/getSpecialityById', async (req, res)=>{
+router.post('/getSpecialityById',authTokenAdmin, async (req, res)=>{
     let {id} = req.body;
     try{
         const search = await Especialidad.findOne({where: {id: id}});
@@ -80,20 +89,21 @@ router.get('/getSpecialityById', async (req, res)=>{
 
 
 router.post('/register', async (req, res)=>{
-    let {username, password}= req.body;
+    let {username, password, account}= req.body;
 
-    if(!username || !password){
+    if(!username || !password || !account){
         res.status(404).send({error: "You must complete all the fields"})
     }else{
         const createUser = await User.create({
             username,
-            password
+            password,
+            account
         });
         res.json(createUser)
     };
 });
 
-router.get('/login', async (req, res)=>{
+router.post('/login', async (req, res)=>{
     let {username, password}= req.body;
     if(!username || !password){
         res.status(404).send({error: "You must complete all the fields"})
@@ -102,7 +112,12 @@ router.get('/login', async (req, res)=>{
         if(!search){
             res.status(404).send({error: "User or password incorrect"})
         }else{
-            res.json(search)
+            jwt.sign({user: search}, 'secretkey', {expiresIn: '8h'}, (err, token)=>{
+                res.json({
+                    token, 
+                    user: search
+                }) 
+            })
         };
     }
 })
