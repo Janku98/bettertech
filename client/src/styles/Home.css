@@ -1,0 +1,24 @@
+.Home{
+    background-image: linear-gradient(rgb(73, 73, 73), rgb(21, 160, 56));
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .containerHome{
+      background-color: rgb(73, 73, 73);
+      width: 800px;
+      height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-evenly;
+  }
+  .navHome{
+    background-color: rgb(37, 58, 40);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
